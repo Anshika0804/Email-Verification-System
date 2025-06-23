@@ -114,6 +114,18 @@ function fetchAndFormatXKCDData(): string {
  * Send the formatted XKCD updates to registered emails.
  */
 function sendXKCDUpdatesToSubscribers(): void {
-  $file = __DIR__ . '/registered_emails.txt';
-  
+    $file = __DIR__ . '/registered_emails.txt';
+    if (!file_exists($file)) return;
+
+    $emails = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $comicHtml = fetchAndFormatXKCDData();
+
+    $subject = "Your XKCD Comic";
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $headers .= "From: no-reply@example.com\r\n";
+
+    foreach ($emails as $email) {
+        mail($email, $subject, $comicHtml, $headers);
+    }
 }
