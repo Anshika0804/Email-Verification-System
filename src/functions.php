@@ -91,7 +91,23 @@ function storeVerificationCode(string $email, string $code): void {
  * Fetch random XKCD comic and format data as HTML.
  */
 function fetchAndFormatXKCDData(): string {
-    // TODO: Implement this function
+    $latestJson = file_get_contents("https://xkcd.com/info.0.json");
+    if (!$latestJson) return "<p>Failed to fetch XKCD data.</p>";
+
+    $latestData = json_decode($latestJson, true);
+    $latestNum = $latestData["num"];
+
+    $randomNum = random_int(1, $latestNum);
+    $comicJson = file_get_contents("https://xkcd.com/$randomNum/info.0.json");
+    if (!$comicJson) return "<p>Failed to fetch XKCD data.</p>";
+
+    $comic = json_decode($comicJson, true);
+
+    $html = "<h2>XKCD Comic</h2>";
+    $html .= "<img src=\"{$comic['img']}\" alt=\"XKCD Comic\">";
+    $html .= "<p><a href=\"#\" id=\"unsubscribe-button\">Unsubscribe</a></p>";
+
+    return $html;
 }
 
 /**
@@ -99,5 +115,5 @@ function fetchAndFormatXKCDData(): string {
  */
 function sendXKCDUpdatesToSubscribers(): void {
   $file = __DIR__ . '/registered_emails.txt';
-    // TODO: Implement this function
+  
 }
