@@ -4,7 +4,7 @@
  * Generate a 6-digit numeric verification code.
  */
 function generateVerificationCode(): string {
-    return str_pad(strval(random_int(0, 999999)), 6, '0', STR_PAD_LEFT);
+  return str_pad(strval(random_int(0, 999999)), 6, '0', STR_PAD_LEFT);
 }
 
 /**
@@ -19,7 +19,14 @@ function sendVerificationEmail(string $email, string $code): bool {
  */
 function registerEmail(string $email): bool {
   $file = __DIR__ . '/registered_emails.txt';
-    // TODO: Implement this function
+  $emails = file_exists($file) ? file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+
+  if (in_array($email, $emails)) {
+      return false;
+  }
+
+  $result = file_put_contents($file, $email . PHP_EOL, FILE_APPEND | LOCK_EX);
+  return $result !== false;
 }
 
 /**
@@ -27,7 +34,20 @@ function registerEmail(string $email): bool {
  */
 function unsubscribeEmail(string $email): bool {
   $file = __DIR__ . '/registered_emails.txt';
-    // TODO: Implement this function
+  if (!file_exists($file)) {
+        return false;
+  }
+
+  $emails = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+  $filtered = array_filter($emails, fn($e) => trim($e) !== trim($email));
+
+  if (count($filtered) === count($emails)) {
+      return false;
+  }
+
+  return file_put_contents($file, implode(PHP_EOL, $filtered) . PHP_EOL, LOCK_EX) !== false;
+  
 }
 
 /**
