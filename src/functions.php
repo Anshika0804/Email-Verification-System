@@ -4,7 +4,7 @@
  * Generate a 6-digit numeric verification code.
  */
 function generateVerificationCode(): string {
-    // TODO: Implement this function
+    return str_pad(strval(random_int(0, 999999)), 6, '0', STR_PAD_LEFT);
 }
 
 /**
