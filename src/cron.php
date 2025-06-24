@@ -1,4 +1,6 @@
 <?php
 require_once 'functions.php';
-// This script should send XKCD updates to all registered emails.
-// You need to implement this functionality.
+
+echo "Sending XKCD comics...\n";
+sendXKCDUpdatesToSubscribers();
+echo "Done.\n";

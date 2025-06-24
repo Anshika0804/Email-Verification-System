@@ -124,5 +124,10 @@ function sendXKCDUpdatesToSubscribers(): void {
 
     foreach ($emails as $email) {
         mail($email, $subject, $comicHtml, $headers);
+
+        //log to file for debugging
+        $logFile = __DIR__ . '/email_log.txt';
+        $content = "To: $email\nSubject: Your XKCD Comic\n$comicHtml\n\n";
+        file_put_contents($logFile, $content, FILE_APPEND);
     }
 }
