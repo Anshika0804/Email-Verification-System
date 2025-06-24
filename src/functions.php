@@ -83,6 +83,19 @@ function storeVerificationCode(string $email, string $code): void {
     file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
 }
 
+function sendUnsubscribeConfirmationEmail(string $email, string $code): bool {
+    $subject = "Confirm Un-subscription";
+    $body = "<p>To confirm un-subscription, use this code: <strong>$code</strong></p>";
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $headers .= "From: no-reply@example.com\r\n";
+
+    $logFile = __DIR__ . '/email_log.txt';
+    $content = "To: $email\nSubject: $subject\n$body\n\n";
+    file_put_contents($logFile, $content, FILE_APPEND);
+
+    return true;
+}
 
 /**
  * Fetch random XKCD comic and format data as HTML.

@@ -1,32 +1,12 @@
-To: test@example.com
-Subject: Your Verification Code
-Code: 852358
-
 To: anshikarai0804@gmail.com
 Subject: Your Verification Code
-Code: 889819
+Code: 139440
 
 To: test@example.com
-Subject: Your Verification Code
-Code: 690155
+Subject: Confirm Un-subscription
+<p>To confirm un-subscription, use this code: <strong>629070</strong></p>
 
-To: skrcoder07@gmail.com
-Subject: Your Verification Code
-Code: 589244
-
-To: test@example.com
-Subject: Your Verification Code
-Code: 455080
-
-To: skrcoder07@gmail.com
-Subject: Your XKCD Comic
-<h2>XKCD Comic</h2><img src="https://imgs.xkcd.com/comics/lying.png" alt="XKCD Comic"><p><a href="#" id="unsubscribe-button">Unsubscribe</a></p>
-
-To: skrcoder07@gmail.com
-Subject: Your XKCD Comic
-<h2>XKCD Comic</h2><img src="https://imgs.xkcd.com/comics/magnus.png" alt="XKCD Comic"><p><a href="#" id="unsubscribe-button">Unsubscribe</a></p>
-
-To: skrcoder07@gmail.com
-Subject: Your XKCD Comic
-<h2>XKCD Comic</h2><img src="https://imgs.xkcd.com/comics/decision_paralysis.png" alt="XKCD Comic"><p><a href="#" id="unsubscribe-button">Unsubscribe</a></p>
+To: anshikarai0804@gmail.com
+Subject: Confirm Un-subscription
+<p>To confirm un-subscription, use this code: <strong>606864</strong></p>
 
