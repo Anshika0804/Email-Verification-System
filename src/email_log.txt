@@ -1,12 +1,4 @@
 To: anshikarai0804@gmail.com
 Subject: Your Verification Code
-Code: 139440
-
-To: test@example.com
-Subject: Confirm Un-subscription
-<p>To confirm un-subscription, use this code: <strong>629070</strong></p>
-
-To: anshikarai0804@gmail.com
-Subject: Confirm Un-subscription
-<p>To confirm un-subscription, use this code: <strong>606864</strong></p>
+<p>Your verification code is: <strong>949124</strong></p>
 

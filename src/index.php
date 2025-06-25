@@ -4,19 +4,26 @@ require_once 'functions.php';
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Phase 1: User submits email only
-    if (isset($_POST['email']) && empty($_POST['verification_code'])) {
-        $email = trim($_POST['email']);
-        $code = generateVerificationCode();
-        storeVerificationCode($email, $code);
-        $success = sendVerificationEmail($email, $code);
-        $message = $success ? "✅ Verification code sent to $email" : "❌ Failed to send email.";
-    } elseif (isset($_POST['email']) && isset($_POST['verification_code']) && !empty($_POST['verification_code'])) {
-        $email = trim($_POST['email']);
-        $code = trim($_POST['verification_code']);
+    $email = trim($_POST['email'] ?? '');
+    $code = trim($_POST['verification_code'] ?? '');
+
+    //Send verification code
+    if (isset($_POST['submit-email']) && !empty($email)) {
+        $generatedCode = generateVerificationCode();
+        storeVerificationCode($email, $generatedCode);
+        $success = sendVerificationEmail($email, $generatedCode);
+        $message = $success
+            ? "✅ Verification code sent to <strong>$email</strong>."
+            : "❌ Failed to send verification email.";
+    }
+
+    //Verify and register
+    elseif (isset($_POST['submit-verification']) && !empty($email) && !empty($code)) {
         if (verifyCode($email, $code)) {
             $registered = registerEmail($email);
-            $message = $registered ? "✅ Email verified and registered successfully!" : "⚠️ Email is already registered.";
+            $message = $registered
+                ? "✅ Successfully subscribed <strong>$email</strong>."
+                : "⚠️ Email is already subscribed.";
         } else {
             $message = "❌ Invalid verification code.";
         }
@@ -24,27 +31,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>XKCD Email Verification</title>
+    <title>Subscribe to XKCD Comic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        form {
+            max-width: 600px;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-row label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .form-row input {
+            flex: 1;
+            padding: 6px;
+        }
+        .form-row button {
+            margin-left: 10px;
+            padding: 6px 12px;
+        }
+        .message {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Subscribe to Daily XKCD Comic</h2>
-    <form method="POST">
-        <label>Email:</label><br>
-            <input type="email" name="email" required value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
-            <button id="submit-email">Submit</button>
-            <br><br>
+    <h2>Subscribe to XKCD Comic</h2>
 
-            <label>Verification Code:</label><br>
-            <input type="text" name="verification_code" maxlength="6" value="<?= isset($_POST['verification_code']) ? htmlspecialchars($_POST['verification_code']) : '' ?>">
-            <button id="submit-verification">Verify</button>
+    <form method="POST">
+        <div class="form-row">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required
+                value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+            <button type="submit" id="submit-email" name="submit-email">Submit</button>
+        </div>
+
+        <div class="form-row">
+            <label for="verification_code">Verification Code:</label>
+            <input type="text" name="verification_code" id="verification_code" maxlength="6"
+                value="<?= isset($_POST['verification_code']) ? htmlspecialchars($_POST['verification_code']) : '' ?>">
+            <button type="submit" id="submit-verification" name="submit-verification">Verify</button>
+        </div>
     </form>
 
-    <?php if ($message): ?>
-        <p><strong><?= htmlspecialchars($message) ?></strong></p>
+    <?php if (!empty($message)): ?>
+        <p class="message"><?= $message ?></p>
     <?php endif; ?>
 </body>
 </html>

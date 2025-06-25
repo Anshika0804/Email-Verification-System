@@ -10,13 +10,19 @@ function generateVerificationCode(): string {
 /**
  * Send a verification code to an email.
  */
-function sendVerificationEmail(string $email, string $code): bool {
-    $log = __DIR__ . '/email_log.txt';
-    $content = "To: $email\nSubject: Your Verification Code\nCode: $code\n\n";
-    file_put_contents($log, $content, FILE_APPEND);
-    return true; // Simulated email sending via log
-}
 
+function sendVerificationEmail(string $email, string $code): bool {
+    $subject = "Your Verification Code";
+    $body = "<p>Your verification code is: <strong>$code</strong></p>";
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8\r\n";
+    $headers .= "From: no-reply@example.com\r\n";
+
+    // Log code for testing
+    file_put_contents(__DIR__ . '/email_log.txt', "To: $email\nSubject: $subject\n$body\n\n", FILE_APPEND);
+
+    return mail($email, $subject, $body, $headers);
+}
 
 /**
  * Register an email by storing it in a file.
@@ -68,7 +74,7 @@ function verifyCode(string $email, string $code): bool {
     $isValid = $data[$email] === $code;
 
     if ($isValid) {
-        unset($data[$email]); // Delete code after one-time use
+        unset($data[$email]); 
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
     }
 
@@ -106,6 +112,7 @@ function fetchAndFormatXKCDData(): string {
 
     $latestData = json_decode($latestJson, true);
     $latestNum = $latestData["num"];
+
     $randomNum = random_int(1, $latestNum);
 
     $comicJson = file_get_contents("https://xkcd.com/$randomNum/info.0.json");
@@ -115,7 +122,7 @@ function fetchAndFormatXKCDData(): string {
 
     $html = "<h2>XKCD Comic</h2>";
     $html .= "<img src=\"{$comic['img']}\" alt=\"XKCD Comic\">";
-    $html .= "<p><a href=\"#\" id=\"unsubscribe-button\">Unsubscribe</a></p>";
+    $html .= "<p><a href=\"http://localhost:8000/unsubscribe.php\" id=\"unsubscribe-button\">Unsubscribe</a></p>";
 
     return $html;
 }
